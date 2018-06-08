@@ -1,0 +1,32 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="WEB-INF/template.xhtml">
+
+    <ui:define name="title">
+        <title>Viaro Networks App</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="msg" showDetail="true" autoUpdate="true" />
+        <div style="width: 700px; margin: 0 auto;">
+
+            <p:panelGrid columns="4" style="text-align: center;">
+                <h:outputText value="Alumno" />
+                <h:outputText value="Profesor" />
+                <h:outputText value="Grado" />
+                <h:outputText value="AlumnoGrado" />
+
+                <p:button href="#{pageContext.request.contextPath}/faces/entidades/alumno.xhtml" value="CRUD Alumno" />
+                <p:button href="#{pageContext.request.contextPath}/faces/entidades/profesor.xhtml" value="CRUD Profesor" />
+                <p:button href="#{pageContext.request.contextPath}/faces/entidades/grado.xhtml" value="CRUD Grado" />
+                <p:button href="#{pageContext.request.contextPath}/faces/entidades/alumno-grado.xhtml" value="CRUD AlumnoGrado" />
+            </p:panelGrid>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

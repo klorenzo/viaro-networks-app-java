@@ -1,0 +1,109 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="../WEB-INF/template.xhtml">
+
+    <ui:define name="title">
+        <title>Viaro Networks App | AlumnoGrado</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="msg" showDetail="true" autoUpdate="true" />
+
+        <div>
+
+            <h:form id="frmAlumnosGrados">
+                <p:dataTable id="dtAlumnosGrados" scrollable="true" scrollWidth="100%" scrollHeight="auto"
+                             emptyMessage="No se encontraron datos." value="#{MBAlumnoGrado.alumnosGrados}" var="alumnoGrado" style="text-align: center;">
+
+                    <f:facet name="header">Alumnos - Grados</f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{alumnoGrado.id}" />
+                    </p:column>
+
+                    <p:column headerText="Alumno">
+                        <h:outputText value="#{MBAlumnoGrado.getNombreAlumno(alumnoGrado.alumnoId)}" />
+                    </p:column>
+
+                    <p:column headerText="Grado">
+                        <h:outputText value="#{MBAlumnoGrado.getNombreGrado(alumnoGrado.gradoId)}" />
+                    </p:column>
+
+                    <p:column headerText="Sección">
+                        <h:outputText value="#{alumnoGrado.seccion}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Modificar" actionListener="#{MBAlumnoGrado.cargarAlumnoGrado(alumnoGrado.id)}"
+                                         update="dlgAlumnoGradoUpdate" oncomplete="PF('wvDlgAlumnoGradoUpdate').show(); return false;" />
+                        <p:commandButton value="Eliminar" actionListener="#{MBAlumnoGrado.delete(alumnoGrado.id)}" update="msg,dtAlumnosGrados" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:separator />
+
+            <p:button value="Crear" onclick="PF('wvDlgAlumnoGradoCreate').show(); return false;" class="viaro-btn" />
+
+            <p:button href="#{pageContext.request.contextPath}/" value="Regresar al Panel de Administración" class="viaro-btn" />
+
+        </div>
+
+        <p:dialog id="dlgAlumnoGradoCreate" widgetVar="wvDlgAlumnoGradoCreate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="alumnoId" value="Alumno:" />
+                        <p:selectOneMenu id="alumnoId" value="#{MBAlumnoGrado.alumnoId}">
+                            <f:selectItems value="#{MBAlumnoGrado.alumnos}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="gradoId" value="Grado:" />
+                        <p:selectOneMenu id="gradoId" value="#{MBAlumnoGrado.gradoId}">
+                            <f:selectItems value="#{MBAlumnoGrado.grados}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="seccion" value="Sección:" />
+                        <h:inputText id="seccion" value="#{MBAlumnoGrado.seccion}" />
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdCrearAlumnoGrado" value="Crear AlumnoGrado" actionListener="#{MBAlumnoGrado.create()}"
+                                 update="msg,:frmAlumnosGrados:dtAlumnosGrados" />
+                <p:button value="Cancelar" onclick="PF('wvDlgAlumnoGradoCreate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dlgAlumnoGradoUpdate" widgetVar="wvDlgAlumnoGradoUpdate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="alumnoId" value="Alumno:" />
+                        <p:selectOneMenu id="alumnoId" value="#{MBAlumnoGrado.alumnoGradoToUpdate.alumnoId}">
+                            <f:selectItems value="#{MBAlumnoGrado.alumnos}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="gradoId" value="Grado:" />
+                        <p:selectOneMenu id="gradoId" value="#{MBAlumnoGrado.alumnoGradoToUpdate.gradoId}">
+                            <f:selectItems value="#{MBAlumnoGrado.grados}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="seccion" value="Sección:" />
+                        <h:inputText id="seccion" value="#{MBAlumnoGrado.alumnoGradoToUpdate.seccion}" />
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdModificarAlumnoGrado" value="Modificar AlumnoGrado" actionListener="#{MBAlumnoGrado.update()}"
+                                 update="msg,:frmAlumnosGrados:dtAlumnosGrados" />
+                <p:button value="Cancelar" onclick="PF('wvDlgAlumnoGradoUpdate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,95 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="../WEB-INF/template.xhtml">
+
+    <ui:define name="title">
+        <title>Viaro Networks App | Grado</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="msg" showDetail="true" autoUpdate="true" />
+
+        <div>
+
+            <h:form id="frmGrados">
+                <p:dataTable id="dtGrados" scrollable="true" scrollWidth="100%" scrollHeight="auto"
+                             emptyMessage="No se encontraron datos." value="#{MBGrado.grados}" var="grado" style="text-align: center;">
+
+                    <f:facet name="header">Grados</f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{grado.id}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{grado.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Profesor">
+                        <h:outputText value="#{MBGrado.getNombreProfesor(grado.profesorId)}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Modificar" actionListener="#{MBGrado.cargarGrado(grado.id)}"
+                                         update="dlgGradoUpdate" oncomplete="PF('wvDlgGradoUpdate').show(); return false;" />
+                        <p:commandButton value="Eliminar" actionListener="#{MBGrado.delete(grado.id)}" update="msg,dtGrados" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:separator />
+
+            <p:button value="Crear" onclick="PF('wvDlgGradoCreate').show(); return false;" class="viaro-btn" />
+
+            <p:button href="#{pageContext.request.contextPath}/" value="Regresar al Panel de Administración" class="viaro-btn" />
+
+        </div>
+
+        <p:dialog id="dlgGradoCreate" widgetVar="wvDlgGradoCreate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <h:inputText id="nombre" value="#{MBGrado.nombre}" />
+
+                        <h:outputLabel for="profesor" value="Profesor:" />
+                        <p:selectOneMenu id="profesor" value="#{MBGrado.profesorId}" appendTo="@this">
+                            <f:selectItems value="#{MBGrado.profesores}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdCrearGrado" value="Crear Grado" actionListener="#{MBGrado.create()}"
+                                 update="msg,:frmGrados:dtGrados" />
+                <p:button value="Cancelar" onclick="PF('wvDlgGradoCreate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dlgGradoUpdate" widgetVar="wvDlgGradoUpdate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <h:inputText id="nombre" value="#{MBGrado.gradoToUpdate.nombre}" />
+
+                        <h:outputLabel for="profesor" value="Profesor:" />
+                        <p:selectOneMenu id="profesor" value="#{MBGrado.gradoToUpdate.profesorId}" appendTo="@this">
+                            <f:selectItems value="#{MBGrado.profesores}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdModificarGrado" value="Modificar Grado" actionListener="#{MBGrado.update()}"
+                                 update="msg,:frmGrados:dtGrados" />
+                <p:button value="Cancelar" onclick="PF('wvDlgGradoUpdate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

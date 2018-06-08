@@ -1,0 +1,119 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="../WEB-INF/template.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="title">
+        <title>Viaro Networks App | Alumno</title>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p:growl id="msg" showDetail="true" autoUpdate="true" />
+
+        <div>
+
+            <h:form id="frmAlumnos">
+                <p:dataTable id="dtAlumnos" scrollable="true" scrollWidth="100%" scrollHeight="auto"
+                             emptyMessage="No se encontraron datos." value="#{MBAlumno.alumnos}" var="alumno" style="text-align: center;">
+
+                    <f:facet name="header">Alumnos</f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{alumno.id}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre Completo">
+                        <h:outputText value="#{alumno.nombre}, #{alumno.apellidos}" />
+                    </p:column>
+
+                    <p:column headerText="Género">
+                        <h:outputText value="#{alumno.genero}" />
+                    </p:column>
+
+                    <p:column headerText="fechaNacimiento">
+                        <h:outputText value="#{alumno.fechaNacimiento}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Modificar" actionListener="#{MBAlumno.cargarAlumno(alumno.id)}"
+                                         update="dlgAlumnoUpdate" oncomplete="PF('wvDlgAlumnoUpdate').show(); return false;" />
+                        <p:commandButton value="Eliminar" actionListener="#{MBAlumno.delete(alumno.id)}" update="msg,dtAlumnos" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:separator />
+
+            <p:button value="Crear" onclick="PF('wvDlgAlumnoCreate').show(); return false" class="viaro-btn" />
+
+            <p:button href="#{pageContext.request.contextPath}/" value="Regresar al Panel de Administración" class="viaro-btn" />
+
+        </div>
+
+        <p:dialog id="dlgAlumnoCreate" widgetVar="wvDlgAlumnoCreate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <h:inputText id="nombre" value="#{MBAlumno.nombre}" />
+
+                        <h:outputLabel for="apellidos" value="Apellidos" />
+                        <h:inputText id="apellidos" value="#{MBAlumno.apellidos}" />
+
+                        <h:outputLabel for="genero" value="Género:" />
+                        <p:selectOneMenu id="genero" value="#{MBAlumno.genero}">
+                            <f:selectItem itemLabel="Femenino" itemValue="F" />
+                            <f:selectItem itemLabel="Masculino" itemValue="M" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="fechaNacimiento" value="Fecha de Nacimiento:" />
+                        <p:calendar id="detalleEventoFechaInicio" value="#{MBAlumno.fechaNacimiento}"
+                                    pattern="yyyy-MM-dd" navigator="true" yearRange="c-50:c" />
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdCrearAlumno" value="Crear Alumno" actionListener="#{MBAlumno.create()}"
+                                 update="msg,:frmAlumnos:dtAlumnos" />
+                <p:button value="Cancelar" onclick="PF('wvDlgAlumnoCreate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dlgAlumnoUpdate" widgetVar="wvDlgAlumnoUpdate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <h:inputText id="nombre" value="#{MBAlumno.alumnoToUpdate.nombre}" />
+
+                        <h:outputLabel for="apellidos" value="Apellidos" />
+                        <h:inputText id="apellidos" value="#{MBAlumno.alumnoToUpdate.apellidos}" />
+
+                        <h:outputLabel for="genero" value="Género:" />
+                        <p:selectOneMenu id="genero" value="#{MBAlumno.alumnoToUpdate.genero}">
+                            <f:selectItem itemLabel="Femenino" itemValue="F" />
+                            <f:selectItem itemLabel="Masculino" itemValue="M" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="fechaNacimiento" value="Fecha de Nacimiento:" />
+                        <p:calendar id="detalleEventoFechaInicio" value="#{MBAlumno.alumnoToUpdate.fechaNacimiento}"
+                                    pattern="yyyy-MM-dd" navigator="true" yearRange="c-50:c" />
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdModificarAlumno" value="Modificar Alumno" actionListener="#{MBAlumno.update()}"
+                                 update="msg,:frmAlumnos:dtAlumnos" />
+                <p:button value="Cancelar" onclick="PF('wvDlgAlumnoUpdate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

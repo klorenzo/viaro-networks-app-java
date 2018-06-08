@@ -1,0 +1,107 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="../WEB-INF/template.xhtml">
+
+    <ui:define name="title">
+        <title>Viaro Networks App | Profesor</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="msg" showDetail="true" autoUpdate="true" />
+
+        <div>
+
+            <h:form id="frmProfesores">
+                <p:dataTable id="dtProfesores" scrollable="true" scrollWidth="100%" scrollHeight="auto"
+                             emptyMessage="No se encontraron datos." value="#{MBProfesor.profesores}" var="profesor" style="text-align: center;">
+
+                    <f:facet name="header">Profesores</f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{profesor.id}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{profesor.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{profesor.apellidos}" />
+                    </p:column>
+
+                    <p:column headerText="Género">
+                        <h:outputText value="#{profesor.genero}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Modificar" actionListener="#{MBProfesor.cargarProfesor(profesor.id)}"
+                                         update="dlgProfesorUpdate" oncomplete="PF('wvDlgProfesorUpdate').show(); return false;" />
+                        <p:commandButton value="Eliminar" actionListener="#{MBProfesor.delete(profesor.id)}" update="msg,dtProfesores" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+            
+            <p:separator />
+
+            <p:button value="Crear" onclick="PF('wvDlgProfesorCreate').show(); return false;" class="viaro-btn" />
+            
+            <p:button href="#{pageContext.request.contextPath}/" value="Regresar al Panel de Administración" class="viaro-btn" />
+
+        </div>
+
+        <p:dialog id="dlgProfesorCreate" widgetVar="wvDlgProfesorCreate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <h:inputText id="nombre" value="#{MBProfesor.nombre}" />
+
+                        <h:outputLabel for="apellidos" value="Apellidos" />
+                        <h:inputText id="apellidos" value="#{MBProfesor.apellidos}" />
+
+                        <h:outputLabel for="genero" value="Género:" />
+                        <p:selectOneMenu id="genero" value="#{MBProfesor.genero}">
+                            <f:selectItem itemLabel="Femenino" itemValue="F" />
+                            <f:selectItem itemLabel="Masculino" itemValue="M" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdCrearProfesor" value="Crear Profesor" actionListener="#{MBProfesor.create()}"
+                                 update="msg,:frmProfesores:dtProfesores" />
+                <p:button value="Cancelar" onclick="PF('wvDlgProfesorCreate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="dlgProfesorUpdate" widgetVar="wvDlgProfesorUpdate" position="center center"
+                  modal="true" resizable="false" responsive="true">
+            <h:form>
+                <p:panel>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <h:inputText id="nombre" value="#{MBProfesor.profesorToUpdate.nombre}" />
+
+                        <h:outputLabel for="apellidos" value="Apellidos" />
+                        <h:inputText id="apellidos" value="#{MBProfesor.profesorToUpdate.apellidos}" />
+
+                        <h:outputLabel for="genero" value="Género:" />
+                        <p:selectOneMenu id="genero" value="#{MBProfesor.profesorToUpdate.genero}">
+                            <f:selectItem itemLabel="Femenino" itemValue="F" />
+                            <f:selectItem itemLabel="Masculino" itemValue="M" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton id="cmdModificarProfesor" value="Modificar Profesor" actionListener="#{MBProfesor.update()}"
+                                 update="msg,:frmProfesores:dtProfesores" />
+                <p:button value="Cancelar" onclick="PF('wvDlgProfesorUpdate').hide(); return false;" />
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>
