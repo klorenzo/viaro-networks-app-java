@@ -1,3 +1,3 @@
-# viaro-networks-app-java
+# Viaro Networks App ( Java )
 
 Pending...
